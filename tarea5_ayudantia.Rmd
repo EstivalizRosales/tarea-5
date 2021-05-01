@@ -1,10 +1,8 @@
 ---
-title: "Tarea 5"
+title: "Tarea 5; Estivaliz Rosales"
 output: github_document
 ---
-## Estivaliz Rosales
 
-## Actividad 5:
 Realizar análisis de agrupamiento (K-means, incluye preprocesamiento de los datos) e índices de evaluación para el archivo “sandwiches.csv” tomando las columnas de nota y precio. Hacer análisis para diferentes K y / o medidas de distancia para que vean cómo se comporta el clustering (En caso de tener algún problema con ese csv, pueden utilizar el csv de Pokémon también para la actividad)
 
 ```{r setup, include=FALSE}
@@ -14,12 +12,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Cargar datos y librerias
 Como bien sabemos, lo primero que debemos hacer es cargar los datos a nuestro R, en conjunto con las librerias.
 ```{r}
-library(dplyr)
 library(tidyverse)
 library(ggplot2)
-library(readr)
-library(stringr)
-library(readr)
 library(datasets)
 library(cluster)
 library(factoextra)
@@ -34,7 +28,6 @@ Como solo utilizaremos dos columnas, borraremos todas las demas para trabajar co
 ```{r}
 datos <- datos[,! (colnames(datos) %in% c("url","Local","Direccion","Ingredientes","texto"))]
 
-na.omit(datos)
 datos <- na.omit(datos)
 head(datos)
 ```
@@ -64,7 +57,6 @@ stats_pre
 datos<-filter(datos, Precio <10500)
 boxplot(datos$Precio, horizontal = TRUE)
 ```
-
 
 ```{r}
 not=boxplot(datos$nota, horizontal =TRUE)
@@ -97,6 +89,7 @@ ggplot(escala_d, aes(Precio, nota, color=clus)) +
   geom_point(alpha=0.5, show.legend = T) +
   theme_bw()
 ```
+
 ## Evolución suma de cuadrados intra-cluster en la medida que aumentamos el numero de k
 ```{r}
 SSinterior <- numeric(30)
@@ -108,7 +101,9 @@ for(k in 1:30){
 
 plot(SSinterior)
 ```
+
 ##EVALUACIÓN
+Existen diversos metodos de evaluacion de calidad de los clusters resultantes. En esta ocasion utilizaremos la inspeccion visula
 
 ##Inspeccion visual
 ```{r}
@@ -134,6 +129,7 @@ summary(coefSil)
 
 fviz_silhouette(coefSil)+coord_flip()
 ```
+
 ## Utilizamos el coeficiente de silueta para encontrar el mejor valor de K
 ```{r}
 coefSil=numeric(30)
@@ -149,26 +145,6 @@ ggplot(tempDF, aes(x=K, y=CS)) +
   scale_x_continuous(breaks=c(1:30))
 ```
 
-
-
-
-
-
-##esto era lo que no me funcionaba porsia
-#```{r}
-#datos2 <- datos[, colnames(datos) %in% c("Type.1","HP", "Attack", "Defense", "Speed", "Generation", "Legendary")]
-#escala_d2 = scale(datos2) %>% as_tibble()
-
-#modelo_kmean <- kmeans(escala_d2, centers = 3)
-#modelo_kmean2 <- kmeans(datos2, centers = 3)
-
-#escala_d2$clus2 <- modelo_kmean$cluster %>% as.factor()
-#datos2$clus2 <- modelo_kmean2$cluster %>% as.factor()
-
-#ggplot(escala_d2, aes(Speed, Attack, color=clus2)) +
-# geom_point(alpha=0.5, show.legend = T) +
-#  theme_bw()
-```
 
 
 
